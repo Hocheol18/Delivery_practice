@@ -31,7 +31,9 @@ class RestaurantScreen extends StatelessWidget {
           future: paginateRestaurant(),
           builder: (context, AsyncSnapshot<List> snapshot) {
             if (!snapshot.hasData) {
-              return Container();
+              return Center(
+                child: CircularProgressIndicator(),
+              );
             }
             return ListView.separated(
               itemBuilder: (_, index) {
@@ -42,7 +44,7 @@ class RestaurantScreen extends StatelessWidget {
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (_) => RestaurantDetailScreen(),
+                        builder: (_) => RestaurantDetailScreen(id: pItem.id),
                       ),
                     );
                   },

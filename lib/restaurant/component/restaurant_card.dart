@@ -1,6 +1,7 @@
 import 'package:delivery/common/const/colors.dart';
 import 'package:flutter/material.dart';
 
+import '../model/restaurant_detail_model.dart';
 import '../model/restaurant_model.dart';
 
 class RestaurantCard extends StatelessWidget {
@@ -57,6 +58,7 @@ class RestaurantCard extends StatelessWidget {
       devlieryTime: model.deliveryTime,
       deliveryFee: model.deliveryFee,
       ratings: model.ratings,
+      detail: model is RestaurantDetailModel ? model.detail : null,
     );
   }
 
@@ -105,7 +107,7 @@ class RestaurantCard extends StatelessWidget {
               if(detail != null && isDetail)
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  child: Text('하위'),
+                  child: Text(detail!),
                 )
             ],
           ),
