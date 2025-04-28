@@ -9,11 +9,11 @@ class DefaultLayout extends StatelessWidget {
   final Widget? bottomNavigationBar;
 
   const DefaultLayout({
-    required this.child,
     super.key,
     this.backgroundColor,
     this.title,
     this.bottomNavigationBar,
+    required this.child,
   });
 
   @override
