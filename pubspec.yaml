@@ -35,6 +35,7 @@ dependencies:
   json_annotation: ^4.9.0
   retrofit: ^4.4.0
   logger: ^2.4.0  # for logging purpose
+  riverpod: ^2.6.1
 
 
 
