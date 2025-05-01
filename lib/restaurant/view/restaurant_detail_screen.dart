@@ -65,7 +65,7 @@ class RestaurantDetailScreen extends StatelessWidget {
             padding: const EdgeInsets.only(top: 16.0),
             child: ProductCard.fromModel(model:model),
           );
-        }, childCount: 10),
+        }, childCount: products.length),
       ),
     );
   }

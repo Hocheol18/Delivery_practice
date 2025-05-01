@@ -43,6 +43,17 @@ class CustomInterceptor extends Interceptor {
   }
 
   // 2) 응답을 받을 때
+  @override
+  void onResponse(Response response, ResponseInterceptorHandler handler) {
+    print('[RES], [${response.requestOptions.method}], ${response.requestOptions.uri}');
+
+
+    super.onResponse(response, handler);
+  }
+
+
+
+
   // 3) 에러 났을 때
   @override
   Future<void> onError(
@@ -66,6 +77,7 @@ class CustomInterceptor extends Interceptor {
     final isStatus401 = err.response?.statusCode == 401;
     final isPathRefresh = err.requestOptions.path == '/auth/token';
 
+    // 인증 오류이고, 만약에 토큰을 발급받는 의도가 아니었다면 -> 다시 토큰을 받아서 재전송
     if (isStatus401 && !isPathRefresh) {
       final dio = Dio();
 
