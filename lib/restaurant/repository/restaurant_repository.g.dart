@@ -1,7 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-// ignore_for_file: unused_element_parameter
-
 part of 'restaurant_repository.dart';
 
 // **************************************************************************
@@ -20,9 +18,13 @@ class _RestaurantRepository implements RestaurantRepository {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<CursorPagination<RestaurantModel>> paginate() async {
+  Future<CursorPagination<RestaurantModel>> paginate({
+    PaginationParams? paginationParams = const PaginationParams(),
+  }) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
+    queryParameters.addAll(paginationParams?.toJson() ?? <String, dynamic>{});
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{r'accessToken': 'true'};
     _headers.removeWhere((k, v) => v == null);
     const Map<String, dynamic>? _data = null;
