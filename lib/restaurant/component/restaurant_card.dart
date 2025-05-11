@@ -29,6 +29,9 @@ class RestaurantCard extends StatelessWidget {
   // 디테일 페이지인지 아닌지
   final bool isDetail;
 
+  // 히어로 키
+  final String? heroKey;
+
   // 디테일 페이지 세부 내용
   final String? detail;
 
@@ -43,6 +46,7 @@ class RestaurantCard extends StatelessWidget {
     required this.devlieryTime,
     this.isDetail = false,
     this.detail,
+    this.heroKey,
   });
 
   factory RestaurantCard.fromModel({
@@ -52,6 +56,7 @@ class RestaurantCard extends StatelessWidget {
     return RestaurantCard(
       isDetail: isDetail,
       image: Image.network(model.thumbUrl, fit: BoxFit.cover),
+      heroKey: model.id,
       name: model.name,
       tags: model.tags,
       ratingsCount: model.ratingsCount,
@@ -66,11 +71,22 @@ class RestaurantCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        if(isDetail)
-          image,
-        // 디테일 페이지 아니면
-        if(!isDetail)
-        ClipRRect(borderRadius: BorderRadius.circular(12.0), child: image),
+        // if (isDetail) image,
+        // // 디테일 페이지 아니면
+        // if (!isDetail)
+        if (heroKey != null)
+          Hero(
+            tag: ObjectKey(heroKey),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(isDetail ? 0 : 12.0),
+              child: image,
+            ),
+          ),
+        if (heroKey == null)
+          ClipRRect(
+            borderRadius: BorderRadius.circular(isDetail ? 0 : 12.0),
+            child: image,
+          ),
         const SizedBox(height: 16.0),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: isDetail ? 16.0 : 0),
@@ -91,7 +107,10 @@ class RestaurantCard extends StatelessWidget {
                 children: [
                   _IconText(icon: Icons.star, label: ratings.toString()),
                   renderDot(),
-                  _IconText(icon: Icons.receipt, label: ratingsCount.toString()),
+                  _IconText(
+                    icon: Icons.receipt,
+                    label: ratingsCount.toString(),
+                  ),
                   renderDot(),
                   _IconText(
                     icon: Icons.timelapse_outlined,
@@ -104,11 +123,11 @@ class RestaurantCard extends StatelessWidget {
                   ),
                 ],
               ),
-              if(detail != null && isDetail)
+              if (detail != null && isDetail)
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
                   child: Text(detail!),
-                )
+                ),
             ],
           ),
         ),

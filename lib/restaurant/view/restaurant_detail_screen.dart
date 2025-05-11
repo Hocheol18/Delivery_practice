@@ -3,6 +3,7 @@ import 'package:delivery/restaurant/component/restaurant_card.dart';
 import 'package:delivery/restaurant/repository/restaurant_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../product/component/product_card.dart';
 import '../model/restaurant_detail_model.dart';
@@ -15,11 +16,12 @@ class RestaurantDetailScreen extends ConsumerStatefulWidget {
   const RestaurantDetailScreen({super.key, required this.id});
 
   @override
-  ConsumerState<RestaurantDetailScreen> createState() => _RestaurantDetailScreenState();
+  ConsumerState<RestaurantDetailScreen> createState() =>
+      _RestaurantDetailScreenState();
 }
 
-class _RestaurantDetailScreenState extends ConsumerState<RestaurantDetailScreen> {
-
+class _RestaurantDetailScreenState
+    extends ConsumerState<RestaurantDetailScreen> {
   @override
   void initState() {
     super.initState();
@@ -28,7 +30,9 @@ class _RestaurantDetailScreenState extends ConsumerState<RestaurantDetailScreen>
   }
 
   Future<RestaurantDetailModel> getRestaurantDetail(WidgetRef ref) async {
-    return ref.watch(restaurantRepositoryProvider).getRestaurantDetail(id: widget.id);
+    return ref
+        .watch(restaurantRepositoryProvider)
+        .getRestaurantDetail(id: widget.id);
 
     // final dio = ref.watch(dioProvider);
     //
@@ -59,10 +63,10 @@ class _RestaurantDetailScreenState extends ConsumerState<RestaurantDetailScreen>
       child: CustomScrollView(
         slivers: [
           renderTop(model: state),
+          if (state is! RestaurantDetailModel) renderLoading(),
+          if (state is RestaurantDetailModel) renderLabel(),
           if (state is RestaurantDetailModel)
-          renderLabel(),
-          if (state is RestaurantDetailModel)
-          renderProduct(products: state.products),
+            renderProduct(products: state.products),
         ],
       ),
 
@@ -79,6 +83,35 @@ class _RestaurantDetailScreenState extends ConsumerState<RestaurantDetailScreen>
       //     );
       //   },
       // ),
+    );
+  }
+
+  SliverPadding renderLoading() {
+    return SliverPadding(
+      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+      sliver: Skeletonizer.sliver(
+        effect: ShimmerEffect(
+          baseColor: Colors.grey,
+          highlightColor: Colors.white,
+          duration: Duration(seconds: 2),
+        ),
+        child: SliverList(
+          delegate: SliverChildBuilderDelegate((context, index) {
+            return Card(
+              color: Colors.white,
+              elevation: 0, // 쉐도우 제거
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.zero, // 모서리 둥글기 제거
+                side: BorderSide.none, // 외곽선 제거
+              ),
+              child: ListTile(
+                title: Text('abcdefud'),
+                subtitle: Text('helloWorldNiceToMeetYou'),
+              ),
+            );
+          }, childCount: 6),
+        ),
+      ),
     );
   }
 
