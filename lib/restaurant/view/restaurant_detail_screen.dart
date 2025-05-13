@@ -9,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../common/model/cursor_pagination_model.dart';
+import '../../common/utils/pagination_utils.dart';
 import '../../product/component/product_card.dart';
 import '../model/restaurant_detail_model.dart';
 import '../model/restaurant_model.dart';
@@ -26,11 +27,22 @@ class RestaurantDetailScreen extends ConsumerStatefulWidget {
 
 class _RestaurantDetailScreenState
     extends ConsumerState<RestaurantDetailScreen> {
+  final ScrollController controller = ScrollController();
+
   @override
   void initState() {
     super.initState();
 
     ref.read(restaurantProvider.notifier).getDetail(id: widget.id);
+
+    controller.addListener(listener);
+  }
+
+  void listener() {
+    PaginationUtils.paginate(
+      controller: controller,
+      provider: ref.read(restaurantRatingProvider(widget.id).notifier),
+    );
   }
 
   Future<RestaurantDetailModel> getRestaurantDetail(WidgetRef ref) async {
@@ -66,6 +78,7 @@ class _RestaurantDetailScreenState
     return DefaultLayout(
       title: '불타는 떡볶이',
       child: CustomScrollView(
+        controller: controller,
         slivers: [
           renderTop(model: state),
           if (state is! RestaurantDetailModel) renderLoading(),
