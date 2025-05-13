@@ -1,11 +1,14 @@
 import 'package:delivery/common/layout/default_layout.dart';
 import 'package:delivery/rating/component/rating_card.dart';
+import 'package:delivery/rating/model/rating_model.dart';
 import 'package:delivery/restaurant/component/restaurant_card.dart';
+import 'package:delivery/restaurant/provider/restaurant_rating_provider.dart';
 import 'package:delivery/restaurant/repository/restaurant_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
+import '../../common/model/cursor_pagination_model.dart';
 import '../../product/component/product_card.dart';
 import '../model/restaurant_detail_model.dart';
 import '../model/restaurant_model.dart';
@@ -54,6 +57,7 @@ class _RestaurantDetailScreenState
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(restaurantDetailProvider(widget.id));
+    final ratingsState = ref.watch(restaurantRatingProvider(widget.id));
 
     if (state == null) {
       return DefaultLayout(child: Center(child: CircularProgressIndicator()));
@@ -68,18 +72,8 @@ class _RestaurantDetailScreenState
           if (state is RestaurantDetailModel) renderLabel(),
           if (state is RestaurantDetailModel)
             renderProduct(products: state.products),
-          SliverPadding(
-            padding: EdgeInsets.symmetric(horizontal: 16.0),
-            sliver: SliverToBoxAdapter(
-              child: RatingCard(
-                avatarImage: AssetImage('asset/img/logo/codefactory_logo.png'),
-                images: [],
-                email: 'didifia9850@naver.com',
-                rating: 4,
-                content: 'Good',
-              ),
-            ),
-          ),
+          if (ratingsState is CursorPagination<RatingModel>)
+            renderRaings(models: ratingsState.data),
         ],
       ),
 
@@ -161,5 +155,20 @@ SliverPadding renderLabel() {
 SliverToBoxAdapter renderTop({required RestaurantModel model}) {
   return SliverToBoxAdapter(
     child: RestaurantCard.fromModel(model: model, isDetail: true),
+  );
+}
+
+SliverPadding renderRaings({required List<RatingModel> models}) {
+  return SliverPadding(
+    padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+    sliver: SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (_, index) => Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16.0),
+          child: RatingCard.fromModel(model: models[index]),
+        ),
+        childCount: models.length,
+      ),
+    ),
   );
 }

@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
 import 'package:collection/collection.dart';
 
+import '../model/rating_model.dart';
+
 class RatingCard extends StatelessWidget {
   // NetworkImage
   // AssetImage
@@ -32,6 +34,14 @@ class RatingCard extends StatelessWidget {
     required this.content,
   });
 
+  factory RatingCard.fromModel({required RatingModel model}) {
+    return RatingCard(avatarImage: NetworkImage(model.user.imageUrl),
+        images: model.imgUrls.map((e) => Image.network(e)).toList(),
+        rating: model.rating,
+        email: model.user.username,
+        content: model.content);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -40,7 +50,7 @@ class RatingCard extends StatelessWidget {
         const SizedBox(height: 8.0),
         _Body(content: content),
         if (images.isNotEmpty)
-        SizedBox(height : 100, child: _Images(images: images)),
+          SizedBox(height: 100, child: _Images(images: images)),
       ],
     );
   }
@@ -81,10 +91,11 @@ class _Header extends StatelessWidget {
         ),
         ...List.generate(
           5,
-          (index) => Icon(
-            index < rating ? Icons.star : Icons.star_border_outlined,
-            color: PRIMARY_COLOR,
-          ),
+              (index) =>
+              Icon(
+                index < rating ? Icons.star : Icons.star_border_outlined,
+                color: PRIMARY_COLOR,
+              ),
         ),
       ],
     );
@@ -122,19 +133,20 @@ class _Images extends StatelessWidget {
     return ListView(
       scrollDirection: Axis.horizontal,
       children:
-          images
-              .mapIndexed(
-                (index, element) => Padding(
-                  padding: EdgeInsets.only(
-                    right: index == images.length - 1 ? 0 : 16.0,
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8.0),
-                    child: element,
-                  ),
-                ),
-              )
-              .toList(),
+      images
+          .mapIndexed(
+            (index, element) =>
+            Padding(
+              padding: EdgeInsets.only(
+                right: index == images.length - 1 ? 0 : 16.0,
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8.0),
+                child: element,
+              ),
+            ),
+      )
+          .toList(),
     );
   }
 }
