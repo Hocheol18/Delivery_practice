@@ -2,6 +2,7 @@ import 'package:delivery/common/const/colors.dart';
 import 'package:flutter/material.dart';
 
 import '../../restaurant/model/restaurant_detail_model.dart';
+import '../model/product_model.dart';
 
 class ProductCard extends StatelessWidget {
   final Image image;
@@ -17,7 +18,23 @@ class ProductCard extends StatelessWidget {
     required this.price,
   });
 
-  factory ProductCard.fromModel({required RestaurantProductModel model}) {
+  factory ProductCard.fromProductModel({required ProductModel model}) {
+    return ProductCard(
+      image: Image.network(
+        model.imgUrl,
+        width: 110,
+        fit: BoxFit.cover,
+        height: 110,
+      ),
+      name: model.name,
+      detail: model.detail,
+      price: model.price,
+    );
+  }
+
+  factory ProductCard.fromRestaurantProductModel({
+    required RestaurantProductModel model,
+  }) {
     return ProductCard(
       image: Image.network(
         model.imgUrl,
@@ -37,10 +54,7 @@ class ProductCard extends StatelessWidget {
     return IntrinsicHeight(
       child: Row(
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8.0),
-            child: image
-          ),
+          ClipRRect(borderRadius: BorderRadius.circular(8.0), child: image),
           const SizedBox(width: 16.0),
           Expanded(
             child: Column(

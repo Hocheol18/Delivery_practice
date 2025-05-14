@@ -22,11 +22,11 @@ final restaurantRatingRepositoryProvider = Provider.family<RestaurantRatingRepos
 abstract class RestaurantRatingRepository implements IBasePaginationRepository<RatingModel>{
   factory RestaurantRatingRepository(Dio dio, {String baseUrl}) = _RestaurantRatingRepository;
 
-  // @override
-  // @GET('/')
-  // @Headers({'accessToken': 'true'})
-  // Future<CursorPagination<RatingModel>> paginate({
-  //   @Queries() PaginationParams? paginationParams = const PaginationParams(),
-  // });
+  @override
+  @GET('/')
+  @Headers({'accessToken': 'true'})
+  Future<CursorPagination<RatingModel>> paginate({
+    @Queries() PaginationParams? paginationParams = const PaginationParams(),
+  });
 
 }

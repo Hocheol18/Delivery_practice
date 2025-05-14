@@ -28,12 +28,12 @@ abstract class RestaurantRepository implements IBasePaginationRepository<Restaur
       _RestaurantRepository;
 
   // http://$ip/restaurant/
-  // @override
-  // @GET('/')
-  // @Headers({'accessToken': 'true'})
-  // Future<CursorPagination<RestaurantModel>> paginate({
-  //   @Queries() PaginationParams? paginationParams = const PaginationParams(),
-  // });
+  @override
+  @GET('/')
+  @Headers({'accessToken': 'true'})
+  Future<CursorPagination<RestaurantModel>> paginate({
+    @Queries() PaginationParams? paginationParams = const PaginationParams(),
+  });
 
   // http://$ip/restaurant/:id
   @GET('/{id}')
