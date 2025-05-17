@@ -1,11 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'dart:convert';
 import 'package:delivery/common/const/colors.dart';
-import 'package:delivery/common/const/securetoken.dart';
 import 'package:delivery/common/layout/default_layout.dart';
-import 'package:delivery/common/secure_storage/secure_storage.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -25,7 +21,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final dio = Dio();
 
     return DefaultLayout(
       child: SingleChildScrollView(
@@ -65,27 +60,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ),
                 SizedBox(height: 16.0,),
                 ElevatedButton(
-                  onPressed: () async {
-                    final rawString = '$username:$password';
+                  onPressed: () {
 
-                    // 이렇게 인코딩함
-                    Codec<String, String> stringToBase64 = utf8.fuse(base64);
-
-                    String token = stringToBase64.encode(rawString);
-
-                    final resp = await dio.post('http://$ip/auth/login', options: Options(
-                      headers: {
-                        'authorization' : 'Basic $token',
-                      }
-                    ));
-
-                    final accessToken = resp.data['accessToken'];
-                    final refreshToken = resp.data['refreshToken'];
-
-                    final storage = ref.read(secureStorageProvider);
-
-                    storage.write(key: ACCESS_TOKEN, value: accessToken);
-                    storage.write(key: REFRESH_TOKEN, value: refreshToken);
 
                     Navigator.of(context).push(MaterialPageRoute(builder: (_) => RootTab(),));
                   },
