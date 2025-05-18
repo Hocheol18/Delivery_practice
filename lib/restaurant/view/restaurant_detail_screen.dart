@@ -16,6 +16,7 @@ import '../model/restaurant_model.dart';
 import '../provider/restaurant_provider.dart';
 
 class RestaurantDetailScreen extends ConsumerStatefulWidget {
+  static String get routeName => 'restaurantDetailScreen';
   final String id;
 
   const RestaurantDetailScreen({super.key, required this.id});
