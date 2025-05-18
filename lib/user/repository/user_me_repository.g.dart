@@ -87,7 +87,8 @@ class _UserMeRepository implements UserMeRepository {
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{r'accessToken': 'true'};
     _headers.removeWhere((k, v) => v == null);
-    final _data = body;
+    final _data = <String, dynamic>{};
+    _data.addAll(body.toJson());
     final _options = _setStreamType<List<BasketItemModel>>(
       Options(method: 'PATCH', headers: _headers, extra: _extra)
           .compose(
