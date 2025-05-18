@@ -67,9 +67,6 @@ class CustomInterceptor extends Interceptor {
     super.onResponse(response, handler);
   }
 
-
-
-
   // 3) 에러 났을 때
   @override
   Future<void> onError(

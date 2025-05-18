@@ -24,7 +24,6 @@ class AuthRepository {
     required String password,
   }) async {
     final serialized = DataUtils.plainToBase64('$username:$password');
-
     final resp = await dio.post('$baseUrl/login', options: Options(
         headers: {
           'authorization': 'Basic $serialized',

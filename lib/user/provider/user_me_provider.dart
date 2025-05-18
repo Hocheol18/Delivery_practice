@@ -6,14 +6,18 @@ import 'package:delivery/user/repository/user_me_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-final userMeProvider = StateNotifierProvider<UserMeStateNotifier, UserModelBase?>((ref) {
-  final authRepository = ref.watch(authRepositoryProvider);
-  final userMeRepository = ref.watch(userMeRepositoryProvider);
-  final storage = ref.watch(secureStorageProvider);
+final userMeProvider =
+    StateNotifierProvider<UserMeStateNotifier, UserModelBase?>((ref) {
+      final authRepository = ref.watch(authRepositoryProvider);
+      final userMeRepository = ref.watch(userMeRepositoryProvider);
+      final storage = ref.watch(secureStorageProvider);
 
-  return UserMeStateNotifier(
-      authRepository: authRepository, repository: userMeRepository, storage: storage);
-});
+      return UserMeStateNotifier(
+        authRepository: authRepository,
+        repository: userMeRepository,
+        storage: storage,
+      );
+    });
 
 class UserMeStateNotifier extends StateNotifier<UserModelBase?> {
   final AuthRepository authRepository;
@@ -56,10 +60,13 @@ class UserMeStateNotifier extends StateNotifier<UserModelBase?> {
         password: password,
       );
 
-      storage.write(key: ACCESS_TOKEN, value: resp.accessToken);
-      storage.write(key: REFRESH_TOKEN, value: resp.refreshToken);
+      await Future.wait([
+        storage.write(key: ACCESS_TOKEN, value: resp.accessToken),
+        storage.write(key: REFRESH_TOKEN, value: resp.refreshToken),
+      ]);
 
       final userResp = await repository.getMe();
+      state = userResp;
       return userResp;
     } catch (e) {
       state = UserModelError(message: '로그인에 실패했습니다.');
@@ -73,7 +80,7 @@ class UserMeStateNotifier extends StateNotifier<UserModelBase?> {
 
     await Future.wait([
       storage.delete(key: ACCESS_TOKEN),
-      storage.delete(key: REFRESH_TOKEN)
+      storage.delete(key: REFRESH_TOKEN),
     ]);
   }
 }

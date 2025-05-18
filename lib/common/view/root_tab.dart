@@ -1,4 +1,5 @@
 import 'package:delivery/common/layout/default_layout.dart';
+import 'package:delivery/user/view/logout_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../product/view/product_screen.dart';
@@ -20,7 +21,7 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
   int currentIndex = 0;
 
   @override
-  Future<void> initState() async {
+  void initState() {
     super.initState();
 
     // this 넣기 위해서는 SingleTickerProviderStateMixin 이거 필요
@@ -77,7 +78,7 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
           RestaurantScreen(),
           ProductScreen(),
           Text('주문'),
-          Text('프로필'),
+          LogoutScreen(),
         ],
       ),
     );

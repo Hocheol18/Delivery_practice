@@ -1,12 +1,11 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:delivery/common/const/colors.dart';
 import 'package:delivery/common/layout/default_layout.dart';
+import 'package:delivery/user/model/user_model.dart';
+import 'package:delivery/user/provider/user_me_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../common/component/custom_text_form_field.dart';
-import '../../common/view/root_tab.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   static String get routeName => 'login';
@@ -22,6 +21,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final state = ref.watch(userMeProvider);
 
     return DefaultLayout(
       child: SingleChildScrollView(
@@ -61,10 +61,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ),
                 SizedBox(height: 16.0,),
                 ElevatedButton(
-                  onPressed: () {
-
-
-                    Navigator.of(context).push(MaterialPageRoute(builder: (_) => RootTab(),));
+                  onPressed: state is UserModelLoading ? null : () async {
+                    ref.read(userMeProvider.notifier).login(username: username, password: password);
                   },
                   style: ElevatedButton.styleFrom(foregroundColor: PRIMARY_COLOR, fixedSize: Size(MediaQuery.of(context).size.width, 10.0)),
                   child: Text('로그인'),
