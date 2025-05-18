@@ -6,6 +6,8 @@ import '../../restaurant/view/restaurant_screen.dart';
 import '../const/colors.dart';
 
 class RootTab extends StatefulWidget {
+  static String get routeName => 'home';
+
   const RootTab({super.key});
 
   @override
@@ -18,7 +20,7 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
   int currentIndex = 0;
 
   @override
-  void initState() {
+  Future<void> initState() async {
     super.initState();
 
     // this 넣기 위해서는 SingleTickerProviderStateMixin 이거 필요
