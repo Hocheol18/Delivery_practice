@@ -29,10 +29,10 @@ class OrderProductModel {
 
 @JsonSerializable()
 class OrderProductCountModel {
-  final OrderProductModel productModel;
+  final OrderProductModel product;
   final int count;
 
-  OrderProductCountModel({required this.productModel, required this.count});
+  OrderProductCountModel({required this.product, required this.count});
 
   factory OrderProductCountModel.fromJson(Map<String, dynamic> json) =>
       _$OrderProductCountModelFromJson(json);
