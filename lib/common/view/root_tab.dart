@@ -1,4 +1,5 @@
 import 'package:delivery/common/layout/default_layout.dart';
+import 'package:delivery/order/view/order_screen.dart';
 import 'package:delivery/user/view/logout_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -77,7 +78,7 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
         children: [
           RestaurantScreen(),
           ProductScreen(),
-          Text('주문'),
+          OrderScreen(),
           LogoutScreen(),
         ],
       ),
