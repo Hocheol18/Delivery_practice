@@ -45,7 +45,7 @@ class BasketProvider extends StateNotifier<List<BasketItemModel>> {
         state.firstWhereOrNull((e) => e.product.id == product.id) != null;
 
     if (exists) {
-      state
+      state = state
           .map(
             (e) =>
                 e.product.id == product.id ? e.copyWith(count: e.count + 1) : e,

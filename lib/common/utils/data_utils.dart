@@ -3,6 +3,10 @@ import 'dart:convert';
 import '../const/securetoken.dart';
 
 class DataUtils {
+  static DateTime stringToDataTime(String value) {
+    return DateTime.parse(value);
+  }
+
   static String pathToUrl(String value) {
     return 'http://$ip$value';
   }
