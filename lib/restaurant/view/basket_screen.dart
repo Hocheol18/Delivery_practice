@@ -94,6 +94,7 @@ class BasketScreen extends ConsumerWidget {
                         if (resp) {
                           // ignore: use_build_context_synchronously
                           context.goNamed(OrderDoneScreen.routeName);
+
                         } else {
                           // ignore: use_build_context_synchronously
                           ScaffoldMessenger.of(context).showSnackBar((SnackBar(content : Text('결제 실패!'))));

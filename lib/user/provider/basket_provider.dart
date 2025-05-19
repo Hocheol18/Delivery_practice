@@ -1,3 +1,4 @@
+import 'package:debounce_throttle/debounce_throttle.dart';
 import 'package:delivery/user/model/basket_item_model.dart';
 import 'package:delivery/user/model/patch_basket_body.dart';
 import 'package:delivery/user/repository/user_me_repository.dart';
@@ -16,8 +17,17 @@ final basketProvider =
 
 class BasketProvider extends StateNotifier<List<BasketItemModel>> {
   final UserMeRepository repository;
+  final updateBasketDebounce = Debouncer(
+    Duration(seconds: 1),
+    initialValue: null,
+    checkEquality: false,
+  );
 
-  BasketProvider({required this.repository}) : super([]);
+  BasketProvider({required this.repository}) : super([]) {
+    updateBasketDebounce.values.listen((state) {
+      patchBasket();
+    });
+  }
 
   Future<void> patchBasket() async {
     await repository.patchBasket(
@@ -45,12 +55,15 @@ class BasketProvider extends StateNotifier<List<BasketItemModel>> {
         state.firstWhereOrNull((e) => e.product.id == product.id) != null;
 
     if (exists) {
-      state = state
-          .map(
-            (e) =>
-                e.product.id == product.id ? e.copyWith(count: e.count + 1) : e,
-          )
-          .toList();
+      state =
+          state
+              .map(
+                (e) =>
+                    e.product.id == product.id
+                        ? e.copyWith(count: e.count + 1)
+                        : e,
+              )
+              .toList();
     } else {
       state = [...state, BasketItemModel(product: product, count: 1)];
     }
@@ -61,7 +74,8 @@ class BasketProvider extends StateNotifier<List<BasketItemModel>> {
 
     // Optimistic Response (긍정적 응답)
     // 응답이 성공할거라고 가정하고 상태를 먼저 업데이트함
-    await patchBasket();
+    // debounce를 하는 이유는 특정 시간 이후에 서버에 응답하도록 함
+    updateBasketDebounce.setValue(null);
   }
 
   Future<void> removeFromBasket({
@@ -97,6 +111,6 @@ class BasketProvider extends StateNotifier<List<BasketItemModel>> {
               )
               .toList();
     }
-    await patchBasket();
+    updateBasketDebounce.setValue(null);
   }
 }

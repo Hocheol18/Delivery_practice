@@ -87,7 +87,7 @@ class _PaginationListViewState<T extends IModelWithId>
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: RefreshIndicator(
         onRefresh: () async {
-          ref.read(widget.provider.notifier).paginate(forceRefetch: true);
+          ref.read(widget.provider.notifier).paginate();
         },
         child: ListView.separated(
           // 항상 스크롤이 되게
